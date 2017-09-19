@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
@@ -21,7 +23,7 @@ var FormValidator = {
 
 		this.$inputTextEmail.change(this.onInputTextEmailChanged.bind(this));		
 		this.$buttonCheckEmail.click(this.onButtonCheckEmailClicked.bind(this));
-		$( "#join-form" ).submit( this.onJoinFormSubmit.bind(this));
+		//$( "#join-form" ).submit( this.onJoinFormSubmit.bind(this));
 	},
 	onJoinFormSubmit: function(){
 		//이름
@@ -115,22 +117,44 @@ $(function(){
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post" action="${pageContext.servletContext.contextPath }/user/join">
+				<form:form
+					modelAttribute="userVo"
+					id="join-form"
+					name="joinForm"
+					method="post"
+					action="${pageContext.servletContext.contextPath }/user/join">
+					
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
+					<form:input path="name"/>
+					<p style="padding-left:0; font-weight:bold; text-align:left; color:red">
+						<form:errors path="name" />
+					</p>
 
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<img id="img-check" src="${pageContext.servletContext.contextPath }/assets/images/check-ok.png" style="display:none; width:24px"/>
+					
 					<input id="btn-checkemail" type="button" value="중복체크">
 					
 					<label class="block-label">패스워드</label>
-					<input id="password" name="password" type="password" value="">
+					<form:password path="password"/>
+					<spring:hasBindErrors name="userVo">
+					   <c:if test="${errors.hasFieldErrors('password') }">
+					   		<P style="padding-left:0; text-align:left; color:#f00; font-weight:bold">
+						   		<spring:message
+						   			code="${errors.getFieldError( 'password' ).codes[0] }"
+						   			text="${errors.getFieldError( 'password' ).defaultMessage }"
+						   		/>
+					   		</P>
+					   </c:if>
+					</spring:hasBindErrors>
+					
+					
 					
 					<fieldset>
 						<legend>성별</legend>
-						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
-						<label>남</label> <input type="radio" name="gender" value="male">
+						<label>여</label> <form:radiobutton path="gender" value="female" />
+						<label>남</label> <form:radiobutton path="gender" value="male" />
 					</fieldset>
 					
 					<fieldset>
@@ -141,7 +165,7 @@ $(function(){
 					
 					<input type="submit" value="가입하기">
 					
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
