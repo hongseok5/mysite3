@@ -45,13 +45,14 @@
 	
 	<insert id="insert" parameterType="guestbookvo">
 		<![CDATA[
-		insert
+		insert 
 		  into guestbook
-		values (#{no }, 
-				#{name }, 
+		values (seq_guestbook.nextval, 
 				#{password }, 
 				#{content }, 
-				sysdate)
+				
+				sysdate,
+				#{name } )
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="BEFORE">
 			select seq_guestbook.nextval from dual

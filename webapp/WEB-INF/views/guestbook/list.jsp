@@ -30,6 +30,7 @@
 					</table>
 				</form>
 				<ul>
+				<!-- 모델 Attribute에 list를 추가하였기 때문에 아래 코드처럼 바로 사용 가능? -->
 					<c:set var="totalCount" value="${fn:length(list) }"/>
 					<c:forEach items="${list }" var="vo" varStatus="status" >
 						<li>

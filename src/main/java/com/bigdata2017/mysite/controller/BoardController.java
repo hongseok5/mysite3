@@ -23,10 +23,11 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	
+	//글 목록을 보는 페이지는 요청하는 URL/메소드, @Auth가 필요없다.
 	@RequestMapping( "" )
 	public String index(
 		@RequestParam( value="p", required=true, defaultValue="1") Integer page,
+		// 파라미터는 총 3개인데 @RequestParam을 쓰는 파라미터들은 설정값이 필요하기 때문에 쓴다, 페이지 파라미터의 경우 기본값 1 페이지를 p 라는 값으로 전달, required true는 생략 가능
 		@RequestParam( value="kwd", required=true, defaultValue="") String keyword,
 		Model model ) {
 		
@@ -36,7 +37,7 @@ public class BoardController {
 		model.addAttribute( "map", map );
 		return "board/index";
 	}
-
+	//개별 글을 보는 페이지는 요청하는 URL/메소드, @Auth가 필요없다.
 	@RequestMapping( "/view" )
 	public String view(
 		@RequestParam( value="no", required=true, defaultValue="0") Long no,
